@@ -56,7 +56,11 @@ public class MainActivity extends AppCompatActivity {
 
         //createPost();
 
-        createPostEncArr();
+        //createPostEncArr();
+
+        //updatePost();
+
+        patchPost();
 
     }
 
@@ -403,6 +407,88 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<Post> call, Throwable t) {
 
+            }
+        });
+    }
+
+    private void updatePost() {
+        Post post = new Post(12, null, "NEw text Update");
+
+        Call <Post> call = jsonPlaceHolderApi.putPost(5, post);
+
+        call.enqueue(new Callback<Post>() {
+            @Override
+            public void onResponse(Call<Post> call, Response<Post> response) {
+                if (!response.isSuccessful()) {
+                    result.setText("Code: " + response.code());
+                    return;
+                }
+
+                Post postResponse = response.body();
+
+                String content = "";
+                content += "Code: " + response.code() + "\n";
+                content += "ID: " + postResponse.getId() + "\n";
+                content += "postId: " + postResponse.getUserId()+ "\n";
+                content += "name: " + postResponse.getTitle()+ "\n";
+                content += "body: " + postResponse.getText()+ "\n\n";
+
+                result.setText(content);
+            }
+
+            @Override
+            public void onFailure(Call<Post> call, Throwable t) {
+
+            }
+        });
+
+    }
+
+    private void patchPost() {
+        Post post = new Post(12, "aaaaaa", "NEw text Update");
+
+        Call <Post> call = jsonPlaceHolderApi.patchPost(5, post);
+
+        call.enqueue(new Callback<Post>() {
+            @Override
+            public void onResponse(Call<Post> call, Response<Post> response) {
+                if (!response.isSuccessful()) {
+                    result.setText("Code: " + response.code());
+                    return;
+                }
+
+                Post postResponse = response.body();
+
+                String content = "";
+                content += "Code: " + response.code() + "\n";
+                content += "ID: " + postResponse.getId() + "\n";
+                content += "postId: " + postResponse.getUserId()+ "\n";
+                content += "name: " + postResponse.getTitle()+ "\n";
+                content += "body: " + postResponse.getText()+ "\n\n";
+
+                result.setText(content);
+            }
+
+            @Override
+            public void onFailure(Call<Post> call, Throwable t) {
+
+            }
+        });
+
+    }
+
+    private void deletePost() {
+        Call <Void> call = jsonPlaceHolderApi.deletePost(5);
+
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                result.setText("Code: " + response.code());
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                //result.setText("Code: " + response.code());
             }
         });
     }
