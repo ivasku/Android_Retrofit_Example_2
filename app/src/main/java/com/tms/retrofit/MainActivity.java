@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
         //now we can create out API where the Retrofit will implement the functions found in this interface
         jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
 
-        getPosts();
+        //getPosts();
 
         //getComments();
 
@@ -70,6 +70,8 @@ public class MainActivity extends AppCompatActivity {
         //updatePost();
 
         //patchPost();
+
+        createHeader();
 
     }
 
@@ -498,6 +500,38 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
                 //result.setText("Code: " + response.code());
+            }
+        });
+    }
+
+    private void createHeader() {
+        Post post = new Post(12, "aaaaaa", "NEw text Update");
+
+        Call <Post> call = jsonPlaceHolderApi.putHeader( "adi adi adi", 5, post);
+
+        call.enqueue(new Callback<Post>() {
+            @Override
+            public void onResponse(Call<Post> call, Response<Post> response) {
+                if (!response.isSuccessful()) {
+                    result.setText("Code: " + response.code());
+                    return;
+                }
+
+                Post postResponse = response.body();
+
+                String content = "";
+                content += "Code: " + response.code() + "\n";
+                content += "ID: " + postResponse.getId() + "\n";
+                content += "postId: " + postResponse.getUserId()+ "\n";
+                content += "name: " + postResponse.getTitle()+ "\n";
+                content += "body: " + postResponse.getText()+ "\n\n";
+
+                result.setText(content);
+            }
+
+            @Override
+            public void onFailure(Call<Post> call, Throwable t) {
+
             }
         });
     }

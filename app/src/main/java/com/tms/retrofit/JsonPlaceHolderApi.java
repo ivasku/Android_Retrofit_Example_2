@@ -10,6 +10,8 @@ import retrofit2.http.Field;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
+import retrofit2.http.Headers;
 import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
@@ -87,5 +89,9 @@ public interface JsonPlaceHolderApi {
 
     @DELETE ("posts/{id}")
     Call<Void> deletePost(@Path("id") int id);
+
+    @Headers("Static-Header: 122234")
+    @PUT("posts/{id}")
+    Call<Post> putHeader(@Header ("Dynamic-Header") String header, @Path("id") int id, @Body Post post);
 
 }
