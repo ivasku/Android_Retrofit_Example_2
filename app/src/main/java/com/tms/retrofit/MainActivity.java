@@ -10,6 +10,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -31,17 +33,24 @@ public class MainActivity extends AppCompatActivity {
 
         result = findViewById(R.id.text_result);
 
+        //log http requests to logcat
+        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
+        loggingInterceptor.level(HttpLoggingInterceptor.Level.BODY);
+
+        OkHttpClient okHttpClient = new OkHttpClient.Builder().addInterceptor(loggingInterceptor).build();
+
         // we create retrifut object with static main URL
         // and we specify the JSON converter we use
         retrofit = new Retrofit.Builder()
                 .baseUrl("https://jsonplaceholder.typicode.com/")
                 .addConverterFactory(GsonConverterFactory.create())
+                .client(okHttpClient) //add client to retrofit so we could see in the logcat http logs
                 .build();
 
         //now we can create out API where the Retrofit will implement the functions found in this interface
         jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
 
-        //getPosts();
+        getPosts();
 
         //getComments();
 
@@ -60,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
 
         //updatePost();
 
-        patchPost();
+        //patchPost();
 
     }
 
